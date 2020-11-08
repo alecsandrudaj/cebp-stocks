@@ -34,6 +34,7 @@ public class Connection implements Runnable {
                     case "BUY":
                         System.out.println("Recieved buy order from client" + clientID + '\n');
                         System.out.println(data);
+
                         // buy order
                         break;
                     case "SELL":
