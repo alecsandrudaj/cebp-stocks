@@ -14,7 +14,7 @@ public class Server {
 
     public void run(int port) {
         Socket clientSocket = null;
-        TransactionManager transactionManager=new TransactionManager();
+        TransactionManager transactionManager = new TransactionManager();
         try {
             this.serverSocket = new ServerSocket(port);
             while (true) {
