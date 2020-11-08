@@ -20,30 +20,51 @@ public class OrderBook {
         return history;
     }
 
-    public boolean putBuyOrderIfAbsent(Order order) {
+    public void putBuyOrderIfAbsent(Order order) {
         synchronized (buyOrders) {
             boolean absent = !buyOrders.contains(order);
             if (absent)
                 buyOrders.add(order);
-            return absent;
+            else
+                this.modifyBuyOrder(order);
         }
     }
 
-    public boolean putSellOrderIfAbsent(Order order) {
+    public void modifyBuyOrder(Order order) {
+        synchronized (buyOrders) {
+            for(Order o : buyOrders)
+                if(o.equals(order)){
+                    o.setPricePerAction(order.getPricePerAction());
+                    o.setSharesNumber(order.getSharesNumber());
+                }
+        }
+    }
+
+    public void putSellOrderIfAbsent(Order order) {
         synchronized (sellOrders) {
             boolean absent = !sellOrders.contains(order);
             if (absent)
                 sellOrders.add(order);
-            return absent;
+            else
+                modifySellOrder(order);
         }
     }
 
-    public boolean putHistoryOrderIfAbsent(Order order) {
+    public void modifySellOrder(Order order) {
+        synchronized (sellOrders) {
+            for(Order o : sellOrders)
+                if(o.equals(order)){
+                    o.setPricePerAction(order.getPricePerAction());
+                    o.setSharesNumber(order.getSharesNumber());
+                }
+        }
+    }
+
+    public void putHistoryOrderIfAbsent(Order order) {
         synchronized (history) {
             boolean absent = !history.contains(order);
             if (absent)
                 history.add(order);
-            return absent;
         }
     }
 

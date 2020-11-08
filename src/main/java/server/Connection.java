@@ -1,5 +1,7 @@
 package server;
 
+import utils.Order;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,9 +14,11 @@ public class Connection implements Runnable {
     private BufferedReader inputConn;
     private PrintWriter outputConn;
     private UUID clientID;
+    private TransactionManager transactionManager;
 
-    public Connection(Socket clientSocket) {
+    public Connection(Socket clientSocket, TransactionManager transactionManager) {
         this.connection = clientSocket;
+        this.transactionManager = transactionManager;
     }
     @Override
     public void run() {
@@ -29,17 +33,17 @@ public class Connection implements Runnable {
                     case "INIT":
                         this.clientID = UUID.fromString(splitInput[1]);
                         System.out.println("Recieved init from client" + clientID + '\n');
-                        // register client
                         break;
                     case "BUY":
                         System.out.println("Recieved buy order from client" + clientID + '\n');
                         System.out.println(data);
-                        // buy order
+                        transactionManager.addBuyOrder(new Order(data));
+                        transactionManager.checkPriceMatch();
                         break;
                     case "SELL":
                         System.out.println("Recieved sell order from client\n" + clientID);
                         System.out.println(data);
-                        // sell order:
+                        transactionManager.addSellOrder(new Order(data));
                         break;
                 }
             }

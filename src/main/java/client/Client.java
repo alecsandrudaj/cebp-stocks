@@ -43,7 +43,7 @@ public class Client {
     }
 
     public void sendInitMessage() {
-        this.outputConn.println("INIT: add order" + this.clientId);
+        this.outputConn.println("INIT:" + this.clientId);
     }
 
     public void sendOrder(Order o) {
@@ -63,6 +63,8 @@ public class Client {
         client.sendInitMessage();
 
         Order or1 = new Order(1000, 24.353, client.clientId, Order.OrderType.SELL);
+        client.sendOrder(or1);
+        or1.setPricePerAction(25);
         client.sendOrder(or1);
 
         Order or2 = new Order(500, 25.353, client.clientId, Order.OrderType.BUY);

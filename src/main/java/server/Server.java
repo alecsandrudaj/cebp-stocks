@@ -18,7 +18,7 @@ public class Server {
             this.serverSocket = new ServerSocket(port);
             while (true) {
                 clientSocket = this.serverSocket.accept();
-                new Thread(new Connection(clientSocket)).start();
+                new Thread(new Connection(clientSocket, new TransactionManager())).start();
             }
         }
         catch (IOException e) {
