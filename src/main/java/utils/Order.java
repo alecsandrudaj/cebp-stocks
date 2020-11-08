@@ -30,11 +30,29 @@ public class Order {
             throw new IllegalArgumentException("Incorect order string");
     }
 
+    public double getPricePerAction(){
+        return this.pricePerAction;
+    }
+
+    public int getSharesNumber() {
+        return sharesNumber;
+    }
+
+    public void setSharesNumber(int sharesNumber){
+        this.sharesNumber = sharesNumber;
+    }
+
+    public void setPricePerAction(double pricePerAction){
+        this.pricePerAction = pricePerAction;
+    }
+
+
     @Override
     public String toString() {
         String typeAsString = (this.type == OrderType.BUY) ? "BUY" : "SELL";
         return typeAsString + ":" + this.orderId.toString() + ":" + this.clientId.toString() + ":" + this.sharesNumber + ":"  + this.pricePerAction;
     }
+
 
 
     public enum OrderType {

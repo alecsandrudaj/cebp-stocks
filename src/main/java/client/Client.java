@@ -20,7 +20,6 @@ public class Client {
     public Client (int port) {
         this.port = port;
         this.clientId = UUID.randomUUID();
-
     }
 
     public boolean connect() {
@@ -52,16 +51,19 @@ public class Client {
     }
 
     public static void main(String[] args) {
+        System.out.println("Start stock exchange ");
         Client client = new Client(789);
         client.connect();
+
         Client cl2 = new Client(789);
         cl2.connect();
         cl2.sendInitMessage();
+
         client.sendInitMessage();
         client.sendInitMessage();
+
         Order or1 = new Order(1000, 24.353, client.clientId, Order.OrderType.SELL);
         client.sendOrder(or1);
-
 
         Order or2 = new Order(500, 25.353, client.clientId, Order.OrderType.BUY);
         cl2.sendOrder(or2);
