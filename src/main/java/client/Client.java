@@ -58,12 +58,11 @@ public class Client {
         cl2.connect();
         cl2.sendInitMessage();
         client.sendInitMessage();
-        client.sendInitMessage();
-        Order or1 = new Order(1000, 24.353, client.clientId, Order.OrderType.SELL);
+        Order or1 = new Order(1000, 24.353, client.clientId);
         client.sendOrder(or1);
 
 
-        Order or2 = new Order(500, 25.353, client.clientId, Order.OrderType.BUY);
+        Order or2 = new Order(500, 25.353, cl2.clientId, client.clientId);
         cl2.sendOrder(or2);
     }
 }
