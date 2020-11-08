@@ -39,6 +39,14 @@ public class Order {
         return sharesNumber;
     }
 
+    public UUID getClientId() {
+        return clientId;
+    }
+
+    public OrderType getType() {
+        return type;
+    }
+
     public void setSharesNumber(int sharesNumber){
         this.sharesNumber = sharesNumber;
     }

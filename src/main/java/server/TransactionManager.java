@@ -15,37 +15,59 @@ public class TransactionManager {
         orderManager.putSellOrderIfAbsent(order);
     }
 
-    public void markCompleteOrder(Order sellOrder, Order buyOrder){
+    private void markCompleteTransaction(Order sellOrder, Order buyOrder){
+        System.out.println("Orders have same price/action and shares number.");
         orderManager.removeSellOrder(sellOrder);
         orderManager.removeBuyOrder(buyOrder);
-        orderManager.putHistoryOrderIfAbsent(sellOrder);
-        orderManager.putHistoryOrderIfAbsent(buyOrder);
+        orderManager.putHistoryOrder(sellOrder);
+        orderManager.putHistoryOrder(buyOrder);
+        System.out.println("Sell order from client " + sellOrder.getClientId() + " and buy order from client " + buyOrder.getClientId() + " matched!");
+    }
+
+    private void markPartialBuyOrder(Order sellOrder, Order buyOrder){
+        System.out.println("Sell order actions are less than buy order actions. Buy order remains available.");
+        orderManager.putHistoryOrder(sellOrder);
+        orderManager.removeSellOrder(sellOrder);
+        buyOrder.setSharesNumber(buyOrder.getSharesNumber() - sellOrder.getSharesNumber());
+        System.out.println("Sell order from client " + sellOrder.getClientId() + " and buy order from client " + buyOrder.getClientId() + " partially matched!");
+    }
+
+    private void markPartialSellOrder(Order sellOrder, Order buyOrder){
+        System.out.println("Buy order actions are less than sell order actions. Sell order remains available.");
+        orderManager.putHistoryOrder(buyOrder);
+        orderManager.removeBuyOrder(buyOrder);
+        sellOrder.setSharesNumber(sellOrder.getSharesNumber() - buyOrder.getSharesNumber());
+        System.out.println("Sell order from client " + sellOrder.getClientId() + " and buy order from client " + buyOrder.getClientId() + " partially matched!");
     }
 
     public void checkPriceMatch(){
+        System.out.println("looking for a match...");
         Queue<Order> buyOrders = orderManager.getBuyOrders();
         Queue<Order> sellOrders = orderManager.getSellOrders();
 
+        boolean match = false;
         for(Order sellOrder: sellOrders){
             for(Order buyOrder: buyOrders){
                 if(sellOrder.getPricePerAction() == buyOrder.getPricePerAction()){
-                    if(sellOrder.getSharesNumber() == buyOrder.getSharesNumber()){
-                        this.markCompleteOrder(sellOrder,buyOrder);
+                    if(sellOrder.getSharesNumber() == buyOrder.getSharesNumber()) {
+                        match = true;
+                        this.markCompleteTransaction(sellOrder, buyOrder);
                     }
-                    else if(sellOrder.getSharesNumber() < buyOrder.getSharesNumber()){
-                        orderManager.putHistoryOrderIfAbsent(sellOrder);
-                        orderManager.removeSellOrder(sellOrder);
-                        buyOrder.setSharesNumber(buyOrder.getSharesNumber() - sellOrder.getSharesNumber());
+                    else if(sellOrder.getSharesNumber() < buyOrder.getSharesNumber()) {
+                        this.markPartialBuyOrder(sellOrder, buyOrder);
+                        match = true;
                     }
-                    else{
-                        orderManager.putHistoryOrderIfAbsent(buyOrder);
-                        orderManager.removeBuyOrder(buyOrder);
-                        sellOrder.setSharesNumber(sellOrder.getSharesNumber() - buyOrder.getSharesNumber());
+                    else {
+                        this.markPartialSellOrder(sellOrder, buyOrder);
+                        match = true;
                     }
-                    System.out.println(orderManager.getHistoryOrders());
                 }
             }
         }
+        if(match)
+            System.out.println("** transactions history: " + orderManager.getHistoryOrders());
+        else
+            System.out.println("nothing found this time.");
     }
 
 }

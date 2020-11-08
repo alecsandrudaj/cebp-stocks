@@ -32,18 +32,20 @@ public class Connection implements Runnable {
                 switch (connType) {
                     case "INIT":
                         this.clientID = UUID.fromString(splitInput[1]);
-                        System.out.println("Recieved init from client" + clientID + '\n');
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received init from client" + clientID + '\n');
                         break;
                     case "BUY":
-                        System.out.println("Recieved buy order from client" + clientID + '\n');
-                        System.out.println(data);
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received buy order from client" + clientID + '\n');
                         transactionManager.addBuyOrder(new Order(data));
                         transactionManager.checkPriceMatch();
                         break;
                     case "SELL":
-                        System.out.println("Recieved sell order from client\n" + clientID);
-                        System.out.println(data);
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received sell order from client" + clientID);
                         transactionManager.addSellOrder(new Order(data));
+//                        transactionManager.checkPriceMatch();
                         break;
                 }
             }
