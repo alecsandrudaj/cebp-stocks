@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Order {
@@ -38,6 +39,14 @@ public class Order {
         return sharesNumber;
     }
 
+    public UUID getClientId() {
+        return clientId;
+    }
+
+    public OrderType getType() {
+        return type;
+    }
+
     public void setSharesNumber(int sharesNumber){
         this.sharesNumber = sharesNumber;
     }
@@ -46,6 +55,20 @@ public class Order {
         this.pricePerAction = pricePerAction;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return clientId.equals(order.clientId) &&
+                orderId.equals(order.orderId) &&
+                type == order.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientId, orderId, type);
+    }
 
     @Override
     public String toString() {

@@ -1,5 +1,7 @@
 package server;
 
+import utils.Order;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,9 +14,11 @@ public class Connection implements Runnable {
     private BufferedReader inputConn;
     private PrintWriter outputConn;
     private UUID clientID;
+    private TransactionManager transactionManager;
 
-    public Connection(Socket clientSocket) {
+    public Connection(Socket clientSocket, TransactionManager transactionManager) {
         this.connection = clientSocket;
+        this.transactionManager = transactionManager;
     }
     @Override
     public void run() {
@@ -28,19 +32,22 @@ public class Connection implements Runnable {
                 switch (connType) {
                     case "INIT":
                         this.clientID = UUID.fromString(splitInput[1]);
-                        System.out.println("Recieved init from client" + clientID + '\n');
-                        // register client
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received init from client" + clientID + '\n');
                         break;
                     case "BUY":
                         System.out.println("Recieved buy order from client" + clientID + '\n');
                         System.out.println(data);
-
-                        // buy order
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received buy order from client" + clientID + '\n');
+                        transactionManager.addBuyOrder(new Order(data));
+                        transactionManager.checkPriceMatch();
                         break;
                     case "SELL":
-                        System.out.println("Recieved sell order from client\n" + clientID);
-                        System.out.println(data);
-                        // sell order:
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received sell order from client" + clientID);
+                        transactionManager.addSellOrder(new Order(data));
+//                        transactionManager.checkPriceMatch();
                         break;
                 }
             }
