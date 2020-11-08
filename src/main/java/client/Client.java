@@ -43,7 +43,7 @@ public class Client {
     }
 
     public void sendInitMessage() {
-        this.outputConn.println("INIT:" + this.clientId);
+        this.outputConn.println("INIT: add order" + this.clientId);
     }
 
     public void sendOrder(Order o) {
