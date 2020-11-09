@@ -1,4 +1,5 @@
 package utils;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Queue;
 
@@ -27,21 +28,9 @@ public class OrderBook {
                 buyOrders.add(order);
                 System.out.println("Buy order ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ") was added to active orders.");
             }
-            else
-                this.modifyBuyOrder(order);
         }
     }
 
-    public void modifyBuyOrder(Order order) {
-        synchronized (buyOrders) {
-            for(Order o : buyOrders)
-                if(o.equals(order)){
-                    System.out.println("Buy order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
-                    o.setPricePerAction(order.getPricePerAction());
-                    o.setSharesNumber(order.getSharesNumber());
-                }
-        }
-    }
 
     public void putSellOrderIfAbsent(Order order) {
         synchronized (sellOrders) {
@@ -50,19 +39,6 @@ public class OrderBook {
                 sellOrders.add(order);
                 System.out.println("Sell order ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ") was added to active orders.");
             }
-            else
-                modifySellOrder(order);
-        }
-    }
-
-    public void modifySellOrder(Order order) {
-        synchronized (sellOrders) {
-            for(Order o : sellOrders)
-                if(o.equals(order)){
-                    System.out.println("Sell order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
-                    o.setPricePerAction(order.getPricePerAction());
-                    o.setSharesNumber(order.getSharesNumber());
-                }
         }
     }
 
@@ -90,6 +66,30 @@ public class OrderBook {
             }
         }
     }
+
+    public void modifyOrder(UUID orderId, String orderType, int sharesNumber, double price, UUID clientID, String fieldToModify) {
+        Queue<Order> orderListToLookIn;
+        if(orderType.equals("SELL"))
+            orderListToLookIn=sellOrders;
+        else
+            orderListToLookIn=buyOrders;
+
+        synchronized (orderListToLookIn){
+            for (Order o : orderListToLookIn){
+                if((o.getOrderId()).equals(orderId)){
+                    if(!(o.getClientId()).equals(clientID))
+                        System.out.println("ClientID: " + clientID + "doesn't have permission to modify orderId: " + orderId);
+                    else {
+                        if(fieldToModify.equals("sharesNumber"))
+                            o.setSharesNumber(sharesNumber);
+                        else if(fieldToModify.equals("price"))
+                            o.setPricePerAction(price);
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public String toString() {

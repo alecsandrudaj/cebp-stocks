@@ -50,6 +50,14 @@ public class Client {
         this.outputConn.println(o.toString());
     }
 
+    public void modifyOrderSharesNumber(UUID orderUID,Order.OrderType orderType, int sharesNumber){
+        this.outputConn.println("MODIFY_SHARES:" + orderUID + ":" + orderType + ":"  + sharesNumber );
+    }
+
+    public void modifyOrderPrice(UUID orderUID, Order.OrderType orderType, double price){
+        this.outputConn.println("MODIFY_PRICE:" + orderUID + ":" + orderType + ":"  + price);
+    }
+
     public static void main(String[] args) {
         System.out.println("**Start stock exchange**");
 
@@ -59,9 +67,9 @@ public class Client {
         seller_1.sendInitMessage();
 
         //Seller 2
-//        Client seller_2 = new Client(789);
-//        seller_2.connect();
-//        seller_2.sendInitMessage();
+        Client seller_2 = new Client(789);
+        seller_2.connect();
+        seller_2.sendInitMessage();
 
         //Buyer 1
         Client buyer_1 = new Client(789);
@@ -75,12 +83,11 @@ public class Client {
 
         Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
         seller_1.sendOrder(sellOrder_1);
-        sellOrder_1.setPricePerAction(20);
-        seller_1.sendOrder(sellOrder_1);
+        seller_1.modifyOrderPrice(sellOrder_1.getOrderId(),sellOrder_1.getType(),20);
 
-//        Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
-//        seller_1.sendOrder(sellOrder_2);
-//
+        Order sellOrder_2 = new Order(400, 20, seller_2.clientId, Order.OrderType.SELL);
+        seller_2.sendOrder(sellOrder_2);
+
         Order buyOrder_1 = new Order(500, 25, buyer_1.clientId, Order.OrderType.BUY);
         buyer_1.sendOrder(buyOrder_1);
 
@@ -89,3 +96,42 @@ public class Client {
 
     }
 }
+/*
+teste valide care merg bine:
+1.
+//Seller 1
+        Client seller_1 = new Client(789);
+        seller_1.connect();
+        seller_1.sendInitMessage();
+
+        //Seller 2
+        Client seller_2 = new Client(789);
+        seller_2.connect();
+        seller_2.sendInitMessage();
+
+        //Buyer 1
+        Client buyer_1 = new Client(789);
+        buyer_1.connect();
+        buyer_1.sendInitMessage();
+
+        //Buyer 2
+        Client buyer_2 = new Client(789);
+        buyer_2.connect();
+        buyer_2.sendInitMessage();
+
+        Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
+        seller_1.sendOrder(sellOrder_1);
+        seller_1.modifyOrderPrice(sellOrder_1.getOrderId(),sellOrder_1.getType(),20);
+
+        Order sellOrder_2 = new Order(400, 20, seller_2.clientId, Order.OrderType.SELL);
+        seller_2.sendOrder(sellOrder_2);
+
+        Order buyOrder_1 = new Order(500, 25, buyer_1.clientId, Order.OrderType.BUY);
+        buyer_1.sendOrder(buyOrder_1);
+
+        Order buyOrder_2 = new Order(900, 20, buyer_2.clientId, Order.OrderType.BUY);
+        buyer_2.sendOrder(buyOrder_2);
+
+ 2.
+
+ */

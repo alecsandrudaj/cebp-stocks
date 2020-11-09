@@ -58,6 +58,10 @@ public class Order {
         System.out.println("After modify price per action : " + this.toString());
     }
 
+    public UUID getOrderId() {
+        return orderId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

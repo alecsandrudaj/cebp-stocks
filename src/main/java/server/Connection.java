@@ -49,6 +49,20 @@ public class Connection implements Runnable {
                         transactionManager.checkPriceMatch();
                         System.out.println(transactionManager.toString());
                         break;
+                    case "MODIFY_SHARES":
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received modify shares of orderId " +  splitInput[1] + " to " + splitInput[3] +  "\n");
+                        transactionManager.modifyOrderSharesNumber(UUID.fromString(splitInput[1]), splitInput[2], Integer.parseInt(splitInput[3]), clientID); //orderId,orderType ,sharesNumber, clientId
+                        transactionManager.checkPriceMatch();
+                        System.out.println(transactionManager.toString());
+                        break;
+                    case "MODIFY_PRICE":
+                        System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
+                        System.out.println("Received modify price of orderId " +  splitInput[1] + " to " + splitInput[3] +  "\n");
+                        transactionManager.modifyOrderPrice(UUID.fromString(splitInput[1]), splitInput[2], Double.parseDouble(splitInput[3]), clientID); //orderId,orderType, price, clientId
+                        transactionManager.checkPriceMatch();
+                        System.out.println(transactionManager.toString());
+                        break;
                 }
             }
         } catch (IOException e) {
