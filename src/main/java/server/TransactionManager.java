@@ -40,7 +40,7 @@ public class TransactionManager {
         System.out.println("Sell order from client " + sellOrder.getClientId() + " and buy order from client " + buyOrder.getClientId() + " partially matched!");
     }
 
-    public void checkPriceMatch(){
+    public synchronized void checkPriceMatch(){
         System.out.println("looking for a match...");
         Queue<Order> buyOrders = orderManager.getBuyOrders();
         Queue<Order> sellOrders = orderManager.getSellOrders();

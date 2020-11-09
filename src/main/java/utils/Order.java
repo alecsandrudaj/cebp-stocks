@@ -51,7 +51,7 @@ public class Order {
         this.sharesNumber = sharesNumber;
     }
 
-    public void setPricePerAction(double pricePerAction){
+    public synchronized void setPricePerAction(double pricePerAction){
         this.pricePerAction = pricePerAction;
     }
 

@@ -77,7 +77,7 @@ public class OrderBook {
         synchronized (sellOrders){
             if(sellOrders.contains(order)) {
                 sellOrders.remove(order);
-                System.out.println("Sell order from client with id: " + order.getClientId() + "was removed.");
+                System.out.println("Sell order from client with id: " + order.getClientId() + " was removed.");
             }
         }
     }
@@ -86,7 +86,7 @@ public class OrderBook {
         synchronized (buyOrders) {
             if (buyOrders.contains(order)) {
                 buyOrders.remove(order);
-                System.out.println("Buy order from client with id: " + order.getClientId() + "was removed.");
+                System.out.println("Buy order from client with id: " + order.getClientId() + " was removed.");
             }
         }
     }

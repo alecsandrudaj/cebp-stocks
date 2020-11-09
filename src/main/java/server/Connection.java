@@ -37,7 +37,6 @@ public class Connection implements Runnable {
                         break;
                     case "BUY":
                         System.out.println("Recieved buy order from client" + clientID + '\n');
-                        System.out.println(data);
                         System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
                         System.out.println("Received buy order from client" + clientID + '\n');
                         transactionManager.addBuyOrder(new Order(data));

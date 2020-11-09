@@ -51,19 +51,31 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        System.out.println("Start stock exchange ");
+        System.out.println("**Start stock exchange**");
+
+        //Seller 1
         Client seller_1 = new Client(789);
         seller_1.connect();
+        seller_1.sendInitMessage();
 
+        //Seller 2
+//        Client seller_2 = new Client(789);
+//        seller_2.connect();
+//        seller_2.sendInitMessage();
+
+        //Buyer 1
         Client buyer_1 = new Client(789);
         buyer_1.connect();
         buyer_1.sendInitMessage();
 
-        seller_1.sendInitMessage();
+        //Buyer 2
+        Client buyer_2 = new Client(789);
+        buyer_2.connect();
+        buyer_2.sendInitMessage();
 
-        Order sellOrder_1 = new Order(1000, 24, seller_1.clientId, Order.OrderType.SELL);
+        Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
         seller_1.sendOrder(sellOrder_1);
-        sellOrder_1.setPricePerAction(25);
+        sellOrder_1.setPricePerAction(24);
         seller_1.sendOrder(sellOrder_1);
 
         Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
@@ -71,5 +83,9 @@ public class Client {
 
         Order buyOrder_1 = new Order(1000, 24, buyer_1.clientId, Order.OrderType.BUY);
         buyer_1.sendOrder(buyOrder_1);
+
+        Order buyOrder_2 = new Order(1000, 25, buyer_2.clientId, Order.OrderType.BUY);
+        buyer_2.sendOrder(buyOrder_2);
+
     }
 }
