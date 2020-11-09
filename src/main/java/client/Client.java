@@ -75,16 +75,16 @@ public class Client {
 
         Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
         seller_1.sendOrder(sellOrder_1);
-        sellOrder_1.setPricePerAction(24);
+        sellOrder_1.setPricePerAction(20);
         seller_1.sendOrder(sellOrder_1);
 
-        Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
-        seller_1.sendOrder(sellOrder_2);
-
-        Order buyOrder_1 = new Order(1000, 24, buyer_1.clientId, Order.OrderType.BUY);
+//        Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
+//        seller_1.sendOrder(sellOrder_2);
+//
+        Order buyOrder_1 = new Order(500, 25, buyer_1.clientId, Order.OrderType.BUY);
         buyer_1.sendOrder(buyOrder_1);
 
-        Order buyOrder_2 = new Order(900, 25, buyer_2.clientId, Order.OrderType.BUY);
+        Order buyOrder_2 = new Order(900, 20, buyer_2.clientId, Order.OrderType.BUY);
         buyer_2.sendOrder(buyOrder_2);
 
     }
