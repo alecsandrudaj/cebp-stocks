@@ -75,8 +75,8 @@ public class Client {
 
         Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
         seller_1.sendOrder(sellOrder_1);
-//        sellOrder_1.setPricePerAction(24);
-//        seller_1.sendOrder(sellOrder_1);
+        sellOrder_1.setPricePerAction(24);
+        seller_1.sendOrder(sellOrder_1);
 
         Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
         seller_1.sendOrder(sellOrder_2);
