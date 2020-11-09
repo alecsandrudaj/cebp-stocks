@@ -25,7 +25,7 @@ public class TransactionManager {
     }
 
     private void markPartialBuyOrder(Order sellOrder, Order buyOrder){
-        System.out.println("Sell order actions are less than buy order actions. Buy order remains available.");
+        System.out.println("Buy order actions ( " + buyOrder.getSharesNumber()+", "+buyOrder.getPricePerAction()+" ) are greater than sell order actions ( " + sellOrder.getSharesNumber()+", "+sellOrder.getPricePerAction()+" ). Buy order remains available.");
         orderManager.putHistoryOrder(sellOrder);
         orderManager.removeSellOrder(sellOrder);
         buyOrder.setSharesNumber(buyOrder.getSharesNumber() - sellOrder.getSharesNumber());
@@ -33,7 +33,7 @@ public class TransactionManager {
     }
 
     private void markPartialSellOrder(Order sellOrder, Order buyOrder){
-        System.out.println("Buy order actions are less than sell order actions. Sell order remains available.");
+        System.out.println("Buy order actions ( " + buyOrder.getSharesNumber()+", "+buyOrder.getPricePerAction()+" ) are less than sell order actions ( " + sellOrder.getSharesNumber()+", "+sellOrder.getPricePerAction()+" ). Sell order remains available.");
         orderManager.putHistoryOrder(buyOrder);
         orderManager.removeBuyOrder(buyOrder);
         sellOrder.setSharesNumber(sellOrder.getSharesNumber() - buyOrder.getSharesNumber());
@@ -70,4 +70,10 @@ public class TransactionManager {
             System.out.println("nothing found this time.");
     }
 
+    @Override
+    public String toString() {
+        return "\n## Active orders ##\n" +
+                 orderManager.toString() +
+                '}';
+    }
 }

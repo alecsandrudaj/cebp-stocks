@@ -91,4 +91,10 @@ public class OrderBook {
         }
     }
 
+    @Override
+    public String toString() {
+        return  "Buy Orders = " + buyOrders.toString() +
+                ", Sell Orders = " + sellOrders.toString() +
+                ", History = " + history.toString();
+    }
 }
