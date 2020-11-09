@@ -47,7 +47,7 @@ public class Connection implements Runnable {
                         System.out.println("\n\n\n*** Thread id: " + Thread.currentThread().getId() + " ***");
                         System.out.println("Received sell order from client" + clientID);
                         transactionManager.addSellOrder(new Order(data));
-//                        transactionManager.checkPriceMatch();
+                        transactionManager.checkPriceMatch();
                         break;
                 }
             }

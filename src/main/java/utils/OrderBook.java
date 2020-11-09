@@ -59,9 +59,9 @@ public class OrderBook {
         synchronized (sellOrders) {
             for(Order o : sellOrders)
                 if(o.equals(order)){
+                    System.out.println("Sell order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
                     o.setPricePerAction(order.getPricePerAction());
                     o.setSharesNumber(order.getSharesNumber());
-                    System.out.println("Sell order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
                 }
         }
     }
