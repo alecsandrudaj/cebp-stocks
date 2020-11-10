@@ -42,6 +42,9 @@ public class Connection implements Runnable {
                         System.out.println("Received sell order from client" + clientID);
                         transactionManager.handleOrder(new Order(data));
                         break;
+                    case "MODIFY":
+                        System.out.println("Recieved modify order from client " + clientID);
+                        break;
                     case "HISTORY":
                         System.out.println("Recieved history request from client" + clientID);
                         String result = transactionManager.getTransactionHistory();

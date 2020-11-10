@@ -1,4 +1,5 @@
 package utils;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Queue;
 import java.util.concurrent.locks.Lock;
@@ -49,24 +50,21 @@ public class OrderBook {
         }
     }
 
-    public void checkMatchorAdd (Order incomingOrder) {
+    private Order checkMatch(Order incomingOrder) {
+        for (Order o : orders) {
+            if (incomingOrder.getType() == Order.OrderType.BUY && o.getType() == Order.OrderType.SELL && incomingOrder.getPricePerAction() >= o.getPricePerAction()) {
+                return o;
+            } else if (incomingOrder.getType() == Order.OrderType.SELL && o.getType() == Order.OrderType.BUY && incomingOrder.getPricePerAction() <= o.getPricePerAction()) {
+                return o;
+            }
+        }
+        return null;
+    }
+    public void checkMatchorAdd(Order incomingOrder) {
         lock1.lock();
         try {
-            boolean isMatch = false;
-            Order match = null;
-            for (Order o : orders) {
-                if (incomingOrder.getType() == Order.OrderType.BUY && o.getType() == Order.OrderType.SELL && incomingOrder.getPricePerAction() >= o.getPricePerAction()) {
-                    isMatch = true;
-                    match = o;
-                    break;
-                } else if (incomingOrder.getType() == Order.OrderType.SELL && o.getType() == Order.OrderType.BUY && incomingOrder.getPricePerAction() <= o.getPricePerAction()) {
-                    isMatch = true;
-                    match = o;
-                    break;
-                }
-            }
-
-            if (isMatch) {
+            Order match = checkMatch(incomingOrder);
+            if (match != null) {
                 makeTransaction(incomingOrder, match);
             } else {
                 orders.add(incomingOrder);
@@ -75,6 +73,43 @@ public class OrderBook {
         }
         finally {
             System.out.println("Active orders: \n" + getActiveOrders());
+            lock1.unlock();
+        }
+    }
+
+    private Order findOrder(UUID orderId) {
+        for (Order o: orders) {
+            if (o.getOrderId().equals(orderId))
+                return o;
+        }
+        return null;
+    }
+    public void modifyOrderShares(UUID orderId, int newShares) {
+        lock1.lock();
+        try {
+            Order orderToModify = findOrder(orderId);
+            if (orderToModify != null) {
+                orders.remove(orderToModify);
+                orderToModify.setSharesNumber(newShares);
+            }
+            checkMatchorAdd(orderToModify);
+        }
+        finally {
+            lock1.unlock();
+        }
+    }
+
+    public void modifyOrderPrice(UUID orderId, int newPrice) {
+        lock1.lock();
+        try {
+            Order orderToModify = findOrder(orderId);
+            if (orderToModify != null) {
+                orders.remove(orderToModify);
+                orderToModify.setSharesNumber(newPrice);
+            }
+            checkMatchorAdd(orderToModify);
+        }
+        finally {
             lock1.unlock();
         }
     }

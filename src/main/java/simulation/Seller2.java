@@ -19,6 +19,11 @@ public class Seller2 implements Runnable {
         Order sell1 = new Order(1000, 1, client.getClientId(), Order.OrderType.SELL);
         client.sendOrder(sell1);
 
+        try {
+            Thread.sleep(1 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         client.getHistory();
     }
 }

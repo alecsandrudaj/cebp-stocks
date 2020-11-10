@@ -17,6 +17,10 @@ public class Order {
         this.orderId = UUID.randomUUID();
     }
 
+    public UUID getOrderId() {
+        return orderId;
+    }
+
     public Order (String data) {
         String[] splitData = data.split(":");
 

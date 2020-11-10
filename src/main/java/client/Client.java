@@ -54,6 +54,14 @@ public class Client {
         this.outputConn.println(o.toString());
     }
 
+    public void modfiyOrderShares(UUID orderID, int newShares) {
+        this.outputConn.println("MODIFY:"+ orderID + ":" + "shares:" + newShares);
+    }
+
+    public void modfiyOrderPrice(UUID orderID, double newPrice) {
+        this.outputConn.println("MODIFY:"+ orderID + ":" + "price:" + newPrice);
+    }
+
     public void getHistory() {
         this.outputConn.println("HISTORY:");
         System.out.println("History recieved for client: " + clientId);
