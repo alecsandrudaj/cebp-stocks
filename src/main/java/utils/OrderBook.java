@@ -1,100 +1,56 @@
 package utils;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Queue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class OrderBook {
 
-    private Queue<Order> buyOrders = new ConcurrentLinkedQueue<Order>();
-    private Queue<Order> sellOrders = new ConcurrentLinkedQueue<Order>();
-    private Queue<Order> history = new ConcurrentLinkedQueue<Order>();
+    private Queue<Order> orders = new ConcurrentLinkedQueue<Order>();
+    private TransactionHistory history = new TransactionHistory();
+    private Lock lock1 = new ReentrantLock();
 
-    public Queue<Order> getBuyOrders(){
-        return buyOrders;
+
+    private void modifyOrder(Order orderToModify, int shares, double price) {
+        orderToModify.setSharesNumber(shares);
+        orderToModify.setPricePerAction(price);
     }
 
-    public Queue<Order> getSellOrders(){
-        return sellOrders;
-    }
+    private void makeTransaction(Order incomingOrder, Order matchOrder) {
+        int incomingShares = incomingOrder.getSharesNumber();
+        int matchShares = matchOrder.getSharesNumber();
 
-    public Queue<Order> getHistoryOrders(){
-        return history;
+        if (incomingShares == matchShares) {
+            orders.remove(matchOrder);
+            System.out.println(incomingOrder.toString() + "matched " + matchOrder.toString() + '\n');
+            history.saveTransaction(incomingOrder, matchOrder);
+        }
+        else if (incomingShares < matchShares) {
+            
+        }
     }
-
-    public void putBuyOrderIfAbsent(Order order) {
-        synchronized (buyOrders) {
-            boolean absent = !buyOrders.contains(order);
-            if (absent) {
-                buyOrders.add(order);
-                System.out.println("Buy order ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ") was added to active orders.");
+    public boolean checkMatch (Order incomingOrder) {
+        lock1.lock();
+        boolean isMatch = false;
+        Order match = null;
+        for (Order o : orders) {
+            if (incomingOrder.getType() == Order.OrderType.BUY && o.getType() == Order.OrderType.SELL && incomingOrder.getPricePerAction() >= o.getPricePerAction()) {
+                isMatch = true;
+                match = o;
+                break;
             }
-            else
-                this.modifyBuyOrder(order);
-        }
-    }
-
-    public void modifyBuyOrder(Order order) {
-        synchronized (buyOrders) {
-            for(Order o : buyOrders)
-                if(o.equals(order)){
-                    System.out.println("Buy order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
-                    o.setPricePerAction(order.getPricePerAction());
-                    o.setSharesNumber(order.getSharesNumber());
-                }
-        }
-    }
-
-    public void putSellOrderIfAbsent(Order order) {
-        synchronized (sellOrders) {
-            boolean absent = !sellOrders.contains(order);
-            if (absent) {
-                sellOrders.add(order);
-                System.out.println("Sell order ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ") was added to active orders.");
+            else if (incomingOrder.getType() == Order.OrderType.SELL && o.getType() == Order.OrderType.BUY && incomingOrder.getPricePerAction() <= o.getPricePerAction()) {
+                isMatch = true;
+                match = o;
+                break;
             }
-            else
-                modifySellOrder(order);
+
+        if (isMatch) {
+
+
+        }
+
         }
     }
 
-    public void modifySellOrder(Order order) {
-        synchronized (sellOrders) {
-            for(Order o : sellOrders)
-                if(o.equals(order)){
-                    System.out.println("Sell order ( " + o.getSharesNumber() + ", " + o.getPricePerAction() + ") was modified to ( " + order.getSharesNumber() + ", " + order.getPricePerAction() + ")." );
-                    o.setPricePerAction(order.getPricePerAction());
-                    o.setSharesNumber(order.getSharesNumber());
-                }
-        }
-    }
-
-    public void putHistoryOrder(Order order) {
-        synchronized (history) {
-            history.add(order);
-            System.out.println(order.getType() + " order from client with id " + order.getClientId() + " was added to history.");
-        }
-    }
-
-    public void removeSellOrder(Order order){
-        synchronized (sellOrders){
-            if(sellOrders.contains(order)) {
-                sellOrders.remove(order);
-                System.out.println("Sell order from client with id: " + order.getClientId() + " was removed.");
-            }
-        }
-    }
-
-    public void removeBuyOrder(Order order){
-        synchronized (buyOrders) {
-            if (buyOrders.contains(order)) {
-                buyOrders.remove(order);
-                System.out.println("Buy order from client with id: " + order.getClientId() + " was removed.");
-            }
-        }
-    }
-
-    @Override
-    public String toString() {
-        return  "Buy Orders = " + buyOrders.toString() +
-                ", Sell Orders = " + sellOrders.toString() +
-                ", History = " + history.toString();
-    }
 }
