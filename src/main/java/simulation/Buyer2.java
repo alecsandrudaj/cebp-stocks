@@ -20,6 +20,8 @@ public class Buyer2 implements Runnable {
         Order buy1 = new Order(800, 2.5, client.getClientId(), Order.OrderType.BUY);
         client.sendOrder(buy1);
 
+        client.getHistory();
+
         try {
             Thread.sleep(10 * 1000);
         } catch (InterruptedException e) {

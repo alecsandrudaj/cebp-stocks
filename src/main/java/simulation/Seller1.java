@@ -21,5 +21,6 @@ public class Seller1 implements Runnable {
 
         Order sell2 = new Order(200, 10, client.getClientId(), Order.OrderType.SELL);
         client.sendOrder(sell2);
+
     }
 }

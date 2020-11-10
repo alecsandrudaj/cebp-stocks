@@ -45,7 +45,11 @@ public class Connection implements Runnable {
                     case "HISTORY":
                         System.out.println("Recieved history request from client" + clientID);
                         String result = transactionManager.getTransactionHistory();
-                        result.lines().forEach(outputConn::println);
+                        String[] lines = result.split("\n");
+                        outputConn.println(lines.length);
+                        for (String l : lines) {
+                            outputConn.println(l);
+                        }
                         break;
                 }
             }

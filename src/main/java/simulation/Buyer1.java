@@ -12,5 +12,6 @@ public class Buyer1 implements Runnable {
 
         Order buy1 = new Order(1500, 1.2, client.getClientId(), Order.OrderType.BUY);
         client.sendOrder(buy1);
+
     }
 }

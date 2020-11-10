@@ -56,15 +56,19 @@ public class Client {
 
     public void getHistory() {
         this.outputConn.println("HISTORY:");
-        String data;
+        System.out.println("History recieved for client: " + clientId);
+
         try {
-            while ((data = this.inputConn.readLine()) != null) {
-                System.out.println(data);
+            int n = Integer.parseInt(this.inputConn.readLine());
+            System.out.println(n + " transactions");
+            while (n>0) {
+                System.out.println(this.inputConn.readLine());
+                n--;
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (IOException e) {
-            System.out.println("Error recieving history: " + e.getMessage());
-        }
+        System.out.println("Done history");
     }
 
     public static void main(String[] args) {
