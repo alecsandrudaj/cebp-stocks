@@ -17,6 +17,10 @@ public class Client {
     private PrintWriter outputConn;
     private  Socket connection;
 
+    public UUID getClientId() {
+        return clientId;
+    }
+
     public Client (int port) {
         this.port = port;
         this.clientId = UUID.randomUUID();
@@ -50,42 +54,52 @@ public class Client {
         this.outputConn.println(o.toString());
     }
 
+    public void getHistory() {
+        this.outputConn.println("HISTORY:");
+        String data;
+        try {
+            while ((data = this.inputConn.readLine()) != null) {
+                System.out.println(data);
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Error recieving history: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("**Start stock exchange**");
 
         //Seller 1
-        Client seller_1 = new Client(789);
+        Client seller_1 = new Client(819);
         seller_1.connect();
         seller_1.sendInitMessage();
 
-        //Seller 2
-//        Client seller_2 = new Client(789);
-//        seller_2.connect();
-//        seller_2.sendInitMessage();
+        Order sell1 = new Order(1000, 2, seller_1.clientId, Order.OrderType.SELL);
+        seller_1.sendOrder(sell1);
 
-        //Buyer 1
-        Client buyer_1 = new Client(789);
+        Client buyer_1 = new Client(819);
         buyer_1.connect();
         buyer_1.sendInitMessage();
 
-        //Buyer 2
-        Client buyer_2 = new Client(789);
+        Order buy1 = new Order(800, 2, buyer_1.clientId, Order.OrderType.BUY);
+        buyer_1.sendOrder(buy1);
+
+        Client buyer_2 = new Client(819);
         buyer_2.connect();
         buyer_2.sendInitMessage();
 
-        Order sellOrder_1 = new Order(1000, 25, seller_1.clientId, Order.OrderType.SELL);
-        seller_1.sendOrder(sellOrder_1);
-//        sellOrder_1.setPricePerAction(24);
-//        seller_1.sendOrder(sellOrder_1);
+        Order sell2 = new Order(200, 5, seller_1.clientId, Order.OrderType.SELL);
+        seller_1.sendOrder(sell2);
 
-        Order sellOrder_2 = new Order(80, 24, seller_1.clientId, Order.OrderType.SELL);
-        seller_1.sendOrder(sellOrder_2);
+        Order buy2 = new Order(500, 5, buyer_2.clientId, Order.OrderType.BUY);
+        buyer_2.sendOrder(buy2);
 
-        Order buyOrder_1 = new Order(1000, 24, buyer_1.clientId, Order.OrderType.BUY);
-        buyer_1.sendOrder(buyOrder_1);
-
-        Order buyOrder_2 = new Order(900, 25, buyer_2.clientId, Order.OrderType.BUY);
-        buyer_2.sendOrder(buyOrder_2);
-
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        buyer_2.getHistory();
     }
 }

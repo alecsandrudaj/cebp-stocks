@@ -9,7 +9,7 @@ public class Server {
 
     public static void main(String[] args) {
             Server server = new Server();
-            server.run(789);
+            server.run(819);
     }
 
     public void run(int port) {
@@ -23,7 +23,7 @@ public class Server {
             }
         }
         catch (IOException e) {
-            System.out.println("Server doesn't work correctly");
+            System.out.println("Server doesn't work correctly: " + e.getMessage());
         }
 
 

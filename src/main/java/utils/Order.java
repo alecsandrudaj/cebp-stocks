@@ -49,13 +49,10 @@ public class Order {
 
     public synchronized void setSharesNumber(int sharesNumber){
         this.sharesNumber = sharesNumber;
-        System.out.println("After modify sharesNumber: " + this.toString());
-
     }
 
     public synchronized void setPricePerAction(double pricePerAction){
         this.pricePerAction = pricePerAction;
-        System.out.println("After modify price per action : " + this.toString());
     }
 
     @Override

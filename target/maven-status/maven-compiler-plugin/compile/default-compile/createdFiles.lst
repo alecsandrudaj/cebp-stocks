@@ -1,5 +1,0 @@
-client\Client.class
-server\Connection.class
-utils\Order$OrderType.class
-server\Server.class
-utils\Order.class
